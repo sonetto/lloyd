@@ -3,23 +3,7 @@
 #include <unistd.h>
 #include <AL/al.h>
 #include <AL/alc.h>
-
-#define pi (3.14159265358979323846)
-
-#define abort_on_error(where, error) ({ \
-    typeof(where) _where = where; \
-    typeof(error) _error = error; \
-    \
-    if(_error) { \
-        fprintf( \
-            stderr, \
-            __FILE__ ":%d: %s error (%#x).\n", \
-            __LINE__, \
-            _where, \
-            _error \
-        ); \
-    } \
-})
+#include "common.h"
 
 static ALCdevice *dev;
 static ALCcontext *ctx;
