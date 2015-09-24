@@ -1,4 +1,5 @@
 #pragma once
+#include <stdlib.h>
 
 #define pi (3.14159265358979323846)
 
@@ -14,5 +15,7 @@
             _where, \
             _error \
         ); \
+        \
+        exit(-1); \
     } \
 })
