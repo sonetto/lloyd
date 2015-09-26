@@ -1,7 +1,6 @@
 #pragma once
-#include <stdlib.h>
 
-#define pi (3.14159265358979323846)
+#include <stdlib.h>
 
 #define abort_on_error(where, error) ({ \
     typeof(where) _where = where; \

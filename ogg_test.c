@@ -4,7 +4,7 @@
 #include <AL/alc.h>
 #include <vorbis/codec.h>
 #include <vorbis/vorbisfile.h>
-#include "common.h"
+#include "abort_on_error.h"
 
 static ALCdevice *dev;
 static ALCcontext *ctx;

@@ -3,7 +3,8 @@
 #include <unistd.h>
 #include <AL/al.h>
 #include <AL/alc.h>
-#include "common.h"
+#include "abort_on_error.h"
+#include "pi.h"
 
 static ALCdevice *dev;
 static ALCcontext *ctx;
