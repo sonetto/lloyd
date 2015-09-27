@@ -1,9 +1,10 @@
 #pragma once
 
+#include "likely.h"
 #include "abort_because.h"
 
 #define alc_safe_abort_on_error(fn, fn_args...) \
-    if(_error != 0) { \
+    if(unlikely(_error != 0)) { \
         abort_because( \
             "alc" #fn "(" #fn_args ") failed (error code: %d).", _error \
         ); \
