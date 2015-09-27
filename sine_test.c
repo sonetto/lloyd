@@ -3,7 +3,8 @@
 #include <unistd.h>
 #include <AL/al.h>
 #include <AL/alc.h>
-#include "abort_on_error.h"
+#include "alc_safe.h"
+#include "al_safe.h"
 #include "pi.h"
 
 static ALCdevice *dev;
@@ -15,29 +16,21 @@ static unsigned bufs[buf_count];
 static unsigned source;
 
 static void audio_init() {
-    dev = alcOpenDevice(NULL);
-    abort_on_error("alcOpenDevice", alcGetError(dev));
+    dev = alc_safe(OpenDevice, NULL);
 
-    ctx = alcCreateContext(dev, NULL);
-    abort_on_error("alcCreateContext", alcGetError(dev));
+    ctx = alc_safe(CreateContext, dev, NULL);
 
-    alcMakeContextCurrent(ctx);
-    abort_on_error("alcMakeContextCurrent", alcGetError(dev));
+    alc_safe(MakeContextCurrent, ctx);
 
-    alGenBuffers(buf_count, bufs);
-    abort_on_error("alGenBuffers", alGetError());
+    al_safe(GenBuffers, buf_count, bufs);
 
-    alGenSources(1, &source);
-    abort_on_error("alGenSources", alGetError());
+    al_safe(GenSources, 1, &source);
 
-    alSource3i(source, AL_POSITION, 0, 0, -1);
-    abort_on_error("alSource3i", alGetError());
+    al_safe(Source3i, source, AL_POSITION, 0, 0, -1);
 
-    alSourcei(source, AL_SOURCE_RELATIVE, AL_TRUE);
-    abort_on_error("alSourcei", alGetError());
+    al_safe(Sourcei, source, AL_SOURCE_RELATIVE, AL_TRUE);
 
-    alSourcei(source, AL_ROLLOFF_FACTOR, 0);
-    abort_on_error("alSourcei", alGetError());
+    al_safe(Sourcei, source, AL_ROLLOFF_FACTOR, 0);
 }
 
 #define sine_freq 44100
@@ -55,41 +48,33 @@ static void audio_play_sine() {
             );
         }
 
-        alBufferData(bufs[i], AL_FORMAT_MONO16, buf, sine_buf_len, sine_freq);
-        abort_on_error("alBufferData", alGetError());
+        al_safe(
+            BufferData, bufs[i], AL_FORMAT_MONO16, buf, sine_buf_len, sine_freq
+        );
     }
 
     for(int i = 0; i < 2; ++i) {
-        alSourceQueueBuffers(source, buf_count, bufs);
-        abort_on_error("alSourceQueueBuffers", alGetError());
+        al_safe(SourceQueueBuffers, source, buf_count, bufs);
     }
 
-    alSourcePlay(source);
-    abort_on_error("alSourcePlay", alGetError());
+    al_safe(SourcePlay, source);
 
     do {
         usleep(10);
-
-        alGetSourcei(source, AL_SOURCE_STATE, &source_state);
-        abort_on_error("alGetSourcei", alGetError());
+        al_safe(GetSourcei, source, AL_SOURCE_STATE, &source_state);
     } while(source_state == AL_PLAYING);
 }
 
 static void audio_close() {
-    alDeleteSources(1, &source);
-    abort_on_error("alDeleteSources", alGetError());
+    al_safe(DeleteSources, 1, &source);
 
-    alDeleteBuffers(buf_count, bufs);
-    abort_on_error("alDeleteBuffers", alGetError());
+    al_safe(DeleteBuffers, buf_count, bufs);
 
-    alcMakeContextCurrent(NULL);
-    abort_on_error("alcMakeContextCurrent", alcGetError(dev));
+    alc_safe(MakeContextCurrent, NULL);
 
-    alcDestroyContext(ctx);
-    abort_on_error("alcDestroyContext", alcGetError(dev));
+    alc_safe(DestroyContext, ctx);
 
-    alcCloseDevice(dev);
-    abort_on_error("alcCloseDevice", alcGetError(dev));
+    alc_safe(CloseDevice, dev);
 }
 
 int main(int argc, char **argv) {

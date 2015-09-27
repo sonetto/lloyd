@@ -4,7 +4,9 @@
 #include <AL/alc.h>
 #include <vorbis/codec.h>
 #include <vorbis/vorbisfile.h>
-#include "abort_on_error.h"
+#include "alc_safe.h"
+#include "al_safe.h"
+#include "assert_expr.h"
 
 static ALCdevice *dev;
 static ALCcontext *ctx;
@@ -18,29 +20,21 @@ OggVorbis_File ogg_file;
 vorbis_info *ogg_info;
 
 static void audio_init() {
-    dev = alcOpenDevice(NULL);
-    abort_on_error("alcOpenDevice", alcGetError(dev));
+    dev = alc_safe(OpenDevice, NULL);
 
-    ctx = alcCreateContext(dev, NULL);
-    abort_on_error("alcCreateContext", alcGetError(dev));
+    ctx = alc_safe(CreateContext, dev, NULL);
 
-    alcMakeContextCurrent(ctx);
-    abort_on_error("alcMakeContextCurrent", alcGetError(dev));
+    alc_safe(MakeContextCurrent, ctx);
 
-    alGenBuffers(buf_count, bufs);
-    abort_on_error("alGenBuffers", alGetError());
+    al_safe(GenBuffers, buf_count, bufs);
 
-    alGenSources(1, &source);
-    abort_on_error("alGenSources", alGetError());
+    al_safe(GenSources, 1, &source);
 
-    alSource3i(source, AL_POSITION, 0, 0, -1);
-    abort_on_error("alSource3i", alGetError());
+    al_safe(Source3i, source, AL_POSITION, 0, 0, -1);
 
-    alSourcei(source, AL_SOURCE_RELATIVE, AL_TRUE);
-    abort_on_error("alSourcei", alGetError());
+    al_safe(Sourcei, source, AL_SOURCE_RELATIVE, AL_TRUE);
 
-    alSourcei(source, AL_ROLLOFF_FACTOR, 0);
-    abort_on_error("alSourcei", alGetError());
+    al_safe(Sourcei, source, AL_ROLLOFF_FACTOR, 0);
 }
 
 #define buf_len (1024 * 16)
@@ -55,14 +49,16 @@ static int audio_read_ogg_into_al_buffer(unsigned al_buf) {
     while(bytes_read < buf_len) {
         int unused;
 
-        int read_result = ov_read(
-            &ogg_file, buf + bytes_read, sizeof(buf) - bytes_read, 0, 2, 1, &unused
+        int read_result = assert_expr(
+            ov_read(
+                &ogg_file,
+                buf + bytes_read,
+                sizeof(buf) - bytes_read,
+                0, 2, 1, &unused
+            ),
+            result >= 0
         );
 
-        if(read_result < 0) {
-            abort_on_error("ov_read", read_result);
-        }
-        else
         if(read_result == 0) {
             break;
         }
@@ -74,11 +70,10 @@ static int audio_read_ogg_into_al_buffer(unsigned al_buf) {
         return ogg_read_eof;
     }
 
-    alBufferData(
-        al_buf, AL_FORMAT_STEREO16, buf, bytes_read, ogg_info->rate
+    al_safe(
+        BufferData, al_buf, AL_FORMAT_STEREO16, buf, bytes_read, ogg_info->rate
     );
 
-    abort_on_error("alBufferData", alGetError());
 
     return ogg_read_ok;
 }
@@ -86,9 +81,9 @@ static int audio_read_ogg_into_al_buffer(unsigned al_buf) {
 static void audio_play_ogg() {
     ALenum source_state;
 
-    abort_on_error(
-        "ov_open_callbacks",
-        ov_open_callbacks(stdin, &ogg_file, NULL, 0, OV_CALLBACKS_NOCLOSE)
+    assert_expr(
+        ov_open_callbacks(stdin, &ogg_file, NULL, 0, OV_CALLBACKS_NOCLOSE),
+        result == 0
     );
 
     ogg_info = ov_info(&ogg_file, -1);
@@ -97,14 +92,11 @@ static void audio_play_ogg() {
         audio_read_ogg_into_al_buffer(bufs[i]);
     }
 
-    alSourceQueueBuffers(source, buf_count, bufs);
-    abort_on_error("alSourceQueueBuffers", alGetError());
+    al_safe(SourceQueueBuffers, source, buf_count, bufs);
 
-    alSourcei(source, AL_LOOPING, AL_FALSE);
-    abort_on_error("alSourcei", alGetError());
+    al_safe(Sourcei, source, AL_LOOPING, AL_FALSE);
 
-    alSourcePlay(source);
-    abort_on_error("alSourcePlay", alGetError());
+    al_safe(SourcePlay, source);
 
     while(1) {
         int free_buf_count;
@@ -114,53 +106,42 @@ static void audio_play_ogg() {
 
         usleep(10);
 
-        alGetSourcei(source, AL_BUFFERS_PROCESSED, &free_buf_count);
-        abort_on_error("alGetSourcei", alGetError());
+        al_safe(GetSourcei, source, AL_BUFFERS_PROCESSED, &free_buf_count);
 
         while(free_buf_count) {
-            alSourceUnqueueBuffers(source, 1, &free_buf);
-            abort_on_error("alSourceUnqueueBuffers", alGetError());
+            al_safe(SourceUnqueueBuffers, source, 1, &free_buf);
 
             if(audio_read_ogg_into_al_buffer(free_buf) == ogg_read_ok) {
-                alSourceQueueBuffers(source, 1, &free_buf);
-                abort_on_error("alSourceQueueBuffers", alGetError());
+                al_safe(SourceQueueBuffers, source, 1, &free_buf);
             }
 
             --free_buf_count;
         }
 
-        alGetSourcei(source, AL_BUFFERS_QUEUED, &queued_count);
-        abort_on_error("alGetSourcei", alGetError());
+        al_safe(GetSourcei, source, AL_BUFFERS_QUEUED, &queued_count);
 
         if(queued_count == 0) {
             break;
         }
 
-        alGetSourcei(source, AL_SOURCE_STATE, &source_state);
-        abort_on_error("alGetSourcei", alGetError());
+        al_safe(GetSourcei, source, AL_SOURCE_STATE, &source_state);
 
         if(source_state != AL_PLAYING) {
-            alSourcePlay(source);
-            abort_on_error("alSourcePlay", alGetError());
+            al_safe(SourcePlay, source);
         }
     }
 }
 
 static void audio_close() {
-    alDeleteSources(1, &source);
-    abort_on_error("alDeleteSources", alGetError());
+    al_safe(DeleteSources, 1, &source);
 
-    alDeleteBuffers(buf_count, bufs);
-    abort_on_error("alDeleteBuffers", alGetError());
+    al_safe(DeleteBuffers, buf_count, bufs);
 
-    alcMakeContextCurrent(NULL);
-    abort_on_error("alcMakeContextCurrent", alcGetError(dev));
+    alc_safe(MakeContextCurrent, NULL);
 
-    alcDestroyContext(ctx);
-    abort_on_error("alcDestroyContext", alcGetError(dev));
+    alc_safe(DestroyContext, ctx);
 
-    alcCloseDevice(dev);
-    abort_on_error("alcCloseDevice", alcGetError(dev));
+    alc_safe(CloseDevice, dev);
 }
 
 int main(int argc, char **argv) {
