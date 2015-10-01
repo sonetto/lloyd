@@ -4,9 +4,9 @@
 #include <AL/alc.h>
 #include <vorbis/codec.h>
 #include <vorbis/vorbisfile.h>
-#include "alc_safe.h"
-#include "al_safe.h"
-#include "assert_expr.h"
+#include "src/include/alc_safe.h"
+#include "src/include/al_safe.h"
+#include "src/include/assert_expr.h"
 
 static ALCdevice *dev;
 static ALCcontext *ctx;

@@ -3,9 +3,9 @@
 #include <unistd.h>
 #include <AL/al.h>
 #include <AL/alc.h>
-#include "alc_safe.h"
-#include "al_safe.h"
-#include "pi.h"
+#include "src/include/alc_safe.h"
+#include "src/include/al_safe.h"
+#include "src/include/pi.h"
 
 static ALCdevice *dev;
 static ALCcontext *ctx;
