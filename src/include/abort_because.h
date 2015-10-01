@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdlib.h>
+#include <stdio.h>
 
 #define abort_because(message, more...) ({ \
     fprintf( \
