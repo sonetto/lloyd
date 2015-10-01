@@ -1,4 +1,4 @@
-GCC_OPTIONS=-Wall -Wextra -Wno-format -std=gnu11 -lvorbisfile -lvorbis -lopenal -lm
+GCC_OPTIONS=-g -Wall -Wextra -Wno-format -std=gnu11 -lvorbisfile -lvorbis -lopenal -lm
 
 all: sine_test ogg_test
 
