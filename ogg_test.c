@@ -20,9 +20,9 @@ OggVorbis_File ogg_file;
 vorbis_info *ogg_info;
 
 static void audio_init() {
-    dev = alc_safe(OpenDevice, NULL);
+    dev = alc_safe(OpenDevice, 0);
 
-    ctx = alc_safe(CreateContext, dev, NULL);
+    ctx = alc_safe(CreateContext, dev, 0);
 
     alc_safe(MakeContextCurrent, ctx);
 
@@ -82,7 +82,7 @@ static void audio_play_ogg() {
     ALenum source_state;
 
     assert_expr(
-        ov_open_callbacks(stdin, &ogg_file, NULL, 0, OV_CALLBACKS_NOCLOSE),
+        ov_open_callbacks(stdin, &ogg_file, 0, 0, OV_CALLBACKS_NOCLOSE),
         result == 0
     );
 
@@ -137,7 +137,7 @@ static void audio_close() {
 
     al_safe(DeleteBuffers, buf_count, bufs);
 
-    alc_safe(MakeContextCurrent, NULL);
+    alc_safe(MakeContextCurrent, 0);
 
     alc_safe(DestroyContext, ctx);
 

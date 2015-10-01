@@ -16,9 +16,9 @@ static unsigned bufs[buf_count];
 static unsigned source;
 
 static void audio_init() {
-    dev = alc_safe(OpenDevice, NULL);
+    dev = alc_safe(OpenDevice, 0);
 
-    ctx = alc_safe(CreateContext, dev, NULL);
+    ctx = alc_safe(CreateContext, dev, 0);
 
     alc_safe(MakeContextCurrent, ctx);
 
@@ -70,7 +70,7 @@ static void audio_close() {
 
     al_safe(DeleteBuffers, buf_count, bufs);
 
-    alc_safe(MakeContextCurrent, NULL);
+    alc_safe(MakeContextCurrent, 0);
 
     alc_safe(DestroyContext, ctx);
 

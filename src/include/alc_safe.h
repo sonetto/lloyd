@@ -14,7 +14,7 @@
     int _error; \
     \
     typeof(alc##fn(fn_args)) result = alc##fn(fn_args); \
-    _error = alcGetError(NULL); \
+    _error = alcGetError(0); \
     \
     alc_safe_abort_on_error(fn, fn_args); \
     \
@@ -25,7 +25,7 @@
     int _error; \
     \
     alc##fn(fn_args); \
-    _error = alcGetError(NULL); \
+    _error = alcGetError(0); \
     \
     alc_safe_abort_on_error(fn, fn_args); \
 })
