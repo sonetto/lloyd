@@ -77,7 +77,7 @@ static void audio_close() {
     alc_safe(CloseDevice, dev);
 }
 
-int main(int argc, char **argv) {
+int main() {
     audio_init();
 
     audio_play_sine();
