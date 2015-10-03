@@ -2,6 +2,8 @@
 
 No time to explain. Code is worth a thousand words.
 
+[![Cat Sandwich](http://i.imgur.com/ybgSf4L.jpg)](src/include/cat_sandwich.h)
+
 ## License
 
 ![](https://www.gnu.org/graphics/agplv3-155x51.png)
