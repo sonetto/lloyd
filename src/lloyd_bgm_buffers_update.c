@@ -1,10 +1,11 @@
+#include <AL/al.h>
 #include "include/al_safe.h"
-#include "include/lloyd_status.h"
-#include "include/lloyd_internal.h"
-#include "include/lloyd_ogg.h"
+#include "include/lloyd_bgm_internal.h"
 
 void lloyd_bgm_buffers_update(struct lloyd_bgm_data *bgm) {
     struct lloyd_source_data *bgm_source = bgm->source;
+    lloyd_core_decoder_instance *bgm_decoder_instance = &bgm->decoder_instance;
+    int bgm_bitrate = bgm->bitrate;
     unsigned bgm_al_source = bgm_source->al_source;
     int bgm_al_source_state;
 
@@ -15,12 +16,23 @@ void lloyd_bgm_buffers_update(struct lloyd_bgm_data *bgm) {
 
     while(free_al_buf_count) {
         unsigned free_al_buf;
+        char buf[lloyd_buf_len];
+
+        int len_read = lloyd_decoder(
+            core, read, bgm_decoder_instance, buf, lloyd_buf_len
+        );
+
+        if(len_read == lloyd_decoder_eof) {
+            break;
+        }
 
         al_safe(SourceUnqueueBuffers, bgm_al_source, 1, &free_al_buf);
 
-        if(lloyd_ogg_read(&bgm->ogg_file, free_al_buf) == lloyd_ok) {
-            al_safe(SourceQueueBuffers, bgm_al_source, 1, &free_al_buf);
-        }
+        al_safe(
+            BufferData, free_al_buf, AL_FORMAT_STEREO16, buf, len_read, bgm_bitrate
+        );
+
+        al_safe(SourceQueueBuffers, bgm_al_source, 1, &free_al_buf);
 
         --free_al_buf_count;
     }

@@ -1,10 +1,13 @@
 #include "include/al_safe.h"
 #include "include/lloyd_internal.h"
 #include "include/lloyd_fade.h"
-#include "include/lloyd_ogg.h"
+#include "include/lloyd_bgm.h"
 
-void lloyd_bgm_start(const char *file_path) {
+lloyd_core_decoder_init_return_type
+lloyd_bgm_start(lloyd_core_decoder_init_params) {
     struct lloyd_bgm_data *bgm = lloyd.bgm;
+    lloyd_core_decoder_instance *bgm_decoder_instance;
+    int bgm_bitrate;
     struct lloyd_source_data *bgm_source;
     unsigned bgm_al_source;
     int bgm_al_source_queued_bufs;
@@ -13,6 +16,7 @@ void lloyd_bgm_start(const char *file_path) {
         bgm = lloyd.bgm = lloyd_bgm_alloc();
     }
 
+    bgm_decoder_instance = &bgm->decoder_instance;
     bgm_source = bgm->source;
     bgm_al_source = bgm_source->al_source;
 
@@ -28,14 +32,26 @@ void lloyd_bgm_start(const char *file_path) {
         return;
     }
 
-    lloyd_ogg_open(file_path, &bgm->ogg_file);
+    lloyd_decoder(
+        core, init, bgm_decoder_instance,
+        lloyd_core_decoder_init_args
+    );
+
+    bgm_bitrate = bgm->bitrate = lloyd_decoder(core, bitrate, bgm_decoder_instance);
 
     for(int i = 0; i < lloyd_buf_count; ++i) {
+        char buf[lloyd_buf_len];
         unsigned al_buf = bgm->al_bufs[i];
 
-        if(lloyd_ogg_read(&bgm->ogg_file, al_buf) == lloyd_ogg_eof) {
+        int len_read = lloyd_decoder(
+            core, read, bgm_decoder_instance, buf, lloyd_buf_len
+        );
+
+        if(len_read == lloyd_decoder_eof) {
             break;
         }
+
+        al_safe(BufferData, al_buf, AL_FORMAT_STEREO16, buf, len_read, bgm_bitrate);
 
         al_safe(SourceQueueBuffers, bgm_al_source, 1, &al_buf);
     }

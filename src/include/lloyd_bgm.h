@@ -1,10 +1,13 @@
 #pragma once
 
+#include "lloyd_core_decoder.h"
+
 void lloyd_bgm_set_fade_in_duration(float value);
 
 void lloyd_bgm_set_fade_out_duration(float value);
 
-void lloyd_bgm_start(const char *file_path);
+lloyd_core_decoder_init_return_type
+lloyd_bgm_start(lloyd_core_decoder_init_params);
 
 void lloyd_bgm_stop();
 

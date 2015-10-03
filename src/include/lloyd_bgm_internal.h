@@ -1,8 +1,9 @@
 #pragma once
 
-#include <vorbis/vorbisfile.h>
 #include "lloyd_buf.h"
 #include "lloyd_bgm.h"
+#include "lloyd_source_internal.h"
+#include "lloyd_core_decoder_internal.h"
 
 struct lloyd_bgm_data {
     int allocated;
@@ -11,7 +12,8 @@ struct lloyd_bgm_data {
 
     unsigned al_bufs[lloyd_buf_count];
 
-    OggVorbis_File ogg_file;
+    lloyd_core_decoder_instance decoder_instance;
+    int bitrate;
 
     float fade_in_duration;
     float fade_out_duration;
