@@ -9,3 +9,9 @@
 #define lloyd_core_decoder_instance lloyd_decoder_get(core, instance)
 
 #define lloyd_core_decoder_init_args lloyd_decoder_get(core, init_args)
+
+#define lloyd_core_decoder_init(args...) (lloyd_decoder(core, init, args))
+
+#define lloyd_core_decoder_bitrate(args...) (lloyd_decoder(core, bitrate, args))
+
+#define lloyd_core_decoder_read(args...) (lloyd_decoder(core, read, args))

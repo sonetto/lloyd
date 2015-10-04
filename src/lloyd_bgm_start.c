@@ -32,19 +32,17 @@ lloyd_bgm_start(lloyd_core_decoder_init_params) {
         return;
     }
 
-    lloyd_decoder(
-        core, init, bgm_decoder_instance,
-        lloyd_core_decoder_init_args
-    );
+    lloyd_core_decoder_init(bgm_decoder_instance, lloyd_core_decoder_init_args);
 
-    bgm_bitrate = bgm->bitrate = lloyd_decoder(core, bitrate, bgm_decoder_instance);
+    bgm_bitrate = bgm->bitrate = lloyd_core_decoder_bitrate(bgm_decoder_instance);
 
     for(int i = 0; i < lloyd_buf_count; ++i) {
         char buf[lloyd_buf_len];
         unsigned al_buf = bgm->al_bufs[i];
 
-        int len_read = lloyd_decoder(
-            core, read, bgm_decoder_instance, buf, lloyd_buf_len
+        int len_read = lloyd_core_decoder_read(
+            bgm_decoder_instance,
+            buf, lloyd_buf_len
         );
 
         if(len_read == lloyd_decoder_eof) {

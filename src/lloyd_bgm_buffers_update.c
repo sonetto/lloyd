@@ -18,8 +18,9 @@ void lloyd_bgm_buffers_update(struct lloyd_bgm_data *bgm) {
         unsigned free_al_buf;
         char buf[lloyd_buf_len];
 
-        int len_read = lloyd_decoder(
-            core, read, bgm_decoder_instance, buf, lloyd_buf_len
+        int len_read = lloyd_core_decoder_read(
+            bgm_decoder_instance,
+            buf, lloyd_buf_len
         );
 
         if(len_read == lloyd_decoder_eof) {
