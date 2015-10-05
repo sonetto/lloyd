@@ -1,6 +1,8 @@
 #include "include/al_safe.h"
 #include "include/lloyd_internal.h"
 
+#include lloyd_bgm_streamer(h)(update)
+
 void lloyd_bgm_update() {
     struct lloyd_bgm_data *bgm;
 
@@ -18,7 +20,7 @@ void lloyd_bgm_update() {
         bgm_source = bgm->source;
         bgm_al_source = bgm_source->al_source;
 
-        lloyd_bgm_buffers_update(bgm);
+        lloyd_bgm_streamer(update)(bgm->streamer_state, bgm_al_source);
 
         lloyd_bgm_fade_update(bgm);
 

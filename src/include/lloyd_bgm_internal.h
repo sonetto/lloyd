@@ -3,7 +3,8 @@
 #include "lloyd_buf.h"
 #include "lloyd_bgm.h"
 #include "lloyd_source_internal.h"
-#include "lloyd_core_decoder_internal.h"
+
+#include lloyd_bgm_streamer(h)(state)
 
 struct lloyd_bgm_data {
     int allocated;
@@ -12,8 +13,7 @@ struct lloyd_bgm_data {
 
     unsigned al_bufs[lloyd_buf_count];
 
-    lloyd_core_decoder_state decoder_state;
-    int bitrate;
+    lloyd_bgm_streamer(state) streamer_state;
 
     float fade_in_duration;
     float fade_out_duration;
