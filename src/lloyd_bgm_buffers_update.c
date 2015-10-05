@@ -4,7 +4,7 @@
 
 void lloyd_bgm_buffers_update(struct lloyd_bgm_data *bgm) {
     struct lloyd_source_data *bgm_source = bgm->source;
-    lloyd_core_decoder_instance *bgm_decoder_instance = &bgm->decoder_instance;
+    lloyd_core_streamer_instance *bgm_streamer_instance = &bgm->streamer_instance;
     int bgm_bitrate = bgm->bitrate;
     unsigned bgm_al_source = bgm_source->al_source;
     int bgm_al_source_state;
@@ -18,8 +18,8 @@ void lloyd_bgm_buffers_update(struct lloyd_bgm_data *bgm) {
         unsigned free_al_buf;
         char buf[lloyd_buf_len];
 
-        int len_read = lloyd_core_decoder_read(
-            bgm_decoder_instance,
+        int len_read = lloyd_core_streamer_read(
+            bgm_streamer_instance,
             buf, lloyd_buf_len
         );
 
