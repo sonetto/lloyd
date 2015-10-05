@@ -2,6 +2,6 @@
 
 #define prefix(s) cat(lloyd_ogg_vorbis_decoder_, s)
 
-int lloyd_ogg_vorbis_decoder_bitrate(prefix(instance) *instance) {
-    return ov_info(instance, -1)->rate;
+int lloyd_ogg_vorbis_decoder_bitrate(prefix(state) *state) {
+    return ov_info(state, -1)->rate;
 }

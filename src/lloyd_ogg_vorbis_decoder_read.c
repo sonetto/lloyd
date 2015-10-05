@@ -5,7 +5,7 @@
 #define prefix(s) cat(lloyd_ogg_vorbis_decoder_, s)
 
 int lloyd_ogg_vorbis_decoder_read(
-    prefix(instance) *instance,
+    prefix(state) *state,
     void *buf, int len
 ) {
     int bytes_read = 0;
@@ -14,7 +14,7 @@ int lloyd_ogg_vorbis_decoder_read(
         int unused;
 
         int read_result = assert_expr(ov_read(
-            instance,
+            state,
             ((char *)buf) + bytes_read,
             len - bytes_read,
             0, 2, 1, &unused

@@ -12,7 +12,7 @@ struct lloyd_bgm_data {
 
     unsigned al_bufs[lloyd_buf_count];
 
-    lloyd_core_decoder_instance decoder_instance;
+    lloyd_core_decoder_state decoder_state;
     int bitrate;
 
     float fade_in_duration;
