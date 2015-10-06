@@ -1,10 +1,14 @@
 #include <math.h>
-#include <stdio.h>
 #include "include/clamp.h"
-#include "include/monotonic_time.h"
+#include "include/monotonic_time_elapsed.h"
 #include "include/al_safe.h"
-#include "include/lloyd_internal.h"
-#include "include/lloyd_fade.h"
+#include "includ/lloyd_context.h"
+#include "include/lloyd_bgm_data.h"
+#include "include/lloyd_bgm_free.h"
+#include "include/lloyd_bgm_start.h"
+#include "include/lloyd_source_data.h"
+#include "include/lloyd_fade_state.h"
+#include "include/lloyd_bgm_after_fade_out_action.h"
 
 static float lloyd_compute_fade_out_gain(float duration, float elapsed) {
     return clamp((duration - elapsed) / duration, 0, 1);
@@ -39,6 +43,7 @@ static void lloyd_bgm_after_fade_out() {
         case 0:
             lloyd_bgm_free(lloyd.bgm);
             break;
+
         case lloyd_bgm_after_fade_out_start_next:
             lloyd_bgm_start_next();
             break;

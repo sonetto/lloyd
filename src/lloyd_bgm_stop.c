@@ -1,4 +1,4 @@
-#include "include/lloyd_internal.h"
+#include "include/lloyd_context.h"
 
 void lloyd_bgm_stop() {
     struct lloyd_bgm_data *bgm = lloyd.bgm;

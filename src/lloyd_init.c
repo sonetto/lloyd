@@ -1,7 +1,10 @@
+#include <AL/alc.h>
+#include <AL/al.h>
 #include "include/alc_safe.h"
 #include "include/al_safe.h"
-#include "include/lloyd.h"
-#include "include/lloyd_internal.h"
+#include "include/lloyd_context.h"
+#include "include/lloyd_max_sources.h"
+#include "include/lloyd_max_concurrent_bgms.h"
 
 static void al_init() {
     lloyd.al_dev = alc_safe(OpenDevice, 0);

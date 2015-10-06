@@ -1,6 +1,6 @@
 #pragma once
 
-#include "likely.h"
+#include "unlikely.h"
 #include "abort_because.h"
 
 #define al_safe(fn, fn_args...) ({ \

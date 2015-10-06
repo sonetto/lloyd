@@ -1,5 +1,10 @@
+#include <AL/al.h>
 #include "include/al_safe.h"
-#include "include/lloyd_internal.h"
+#include "include/lloyd_context.h"
+#include "include/lloyd_max_concurrent_bgms.h"
+#include "include/lloyd_bgm_buffers_update.h"
+#include "include/lloyd_bgm_fade_update.h"
+#include "include/lloyd_bgm_free.h"
 
 void lloyd_bgm_update() {
     struct lloyd_bgm_data *bgm;

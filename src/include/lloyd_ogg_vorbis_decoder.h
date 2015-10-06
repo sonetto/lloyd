@@ -1,5 +1,11 @@
 #pragma once
 
-#define lloyd_ogg_vorbis_decoder_init_return_type void
+#include "cat.h"
+#include "cat_sandwich.h"
+#include "stringify.h"
 
-#define lloyd_ogg_vorbis_decoder_init_params const char *file_path
+#define lloyd_ogg_vorbis_decoder(tail) \
+    cat(lloyd_ogg_vorbis_decoder_, tail)
+
+#define lloyd_ogg_vorbis_decoder_h(tail) \
+    stringify(cat_sandwich(lloyd_ogg_vorbis_decoder_, tail, .h))

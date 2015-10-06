@@ -1,11 +1,11 @@
 #include <vorbis/codec.h>
 #include "include/assert_expr.h"
-#include "include/lloyd_ogg_vorbis_decoder_internal.h"
 
-#define prefix(s) cat(lloyd_ogg_vorbis_decoder_, s)
+#include "include/lloyd_ogg_vorbis_decoder.h"
+#include lloyd_ogg_vorbis_decoder_h(state)
 
 int lloyd_ogg_vorbis_decoder_read(
-    prefix(state) *state,
+    lloyd_ogg_vorbis_decoder(state) *state,
     void *buf, int len
 ) {
     int bytes_read = 0;

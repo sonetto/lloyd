@@ -1,10 +1,16 @@
 #include <AL/al.h>
 #include "include/al_safe.h"
-#include "include/lloyd_bgm_internal.h"
+#include "include/lloyd_bgm_data.h"
+#include "include/lloyd_decoder_eof.h"
+
+#include "include/lloyd_bgm_decoder.h"
+
+#include lloyd_bgm_decoder_h(state)
+#include lloyd_bgm_decoder_h(read)
 
 void lloyd_bgm_buffers_update(struct lloyd_bgm_data *bgm) {
     struct lloyd_source_data *bgm_source = bgm->source;
-    lloyd_core_decoder_state *bgm_decoder_state = &bgm->decoder_state;
+    lloyd_bgm_decoder(state) *bgm_decoder_state = &bgm->decoder_state;
     int bgm_bitrate = bgm->bitrate;
     unsigned bgm_al_source = bgm_source->al_source;
     int bgm_al_source_state;
@@ -18,9 +24,8 @@ void lloyd_bgm_buffers_update(struct lloyd_bgm_data *bgm) {
         unsigned free_al_buf;
         char buf[lloyd_buf_len];
 
-        int len_read = lloyd_core_decoder_read(
-            bgm_decoder_state,
-            buf, lloyd_buf_len
+        int len_read = lloyd_bgm_decoder(read)(
+            bgm_decoder_state, buf, lloyd_buf_len
         );
 
         if(len_read == lloyd_decoder_eof) {

@@ -2,8 +2,8 @@
 #include <AL/al.h>
 #include "include/al_safe.h"
 #include "include/lloyd_free.h"
-#include "include/lloyd_buf.h"
-#include "include/lloyd_source_internal.h"
+#include "include/lloyd_source_data.h"
+#include "include/lloyd_buf_count.h"
 
 void lloyd_source_free(struct lloyd_source_data *source) {
     unsigned bgm_al_source = source->al_source;

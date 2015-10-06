@@ -1,14 +1,12 @@
 #pragma once
 
-#include <AL/alc.h>
-#include <AL/al.h>
-#include "lloyd.h"
-#include "lloyd_source_internal.h"
-#include "lloyd_bgm_internal.h"
+#include "lloyd_max_sources.h"
+#include "lloyd_max_concurrent_bgms.h"
+#include "lloyd_source_data.h"
+#include "lloyd_bgm_data.h"
 
-#define lloyd_max_sources (32)
-
-#define lloyd_max_concurrent_bgms (2)
+struct ALCdevice;
+struct ALCcontext;
 
 struct lloyd_context {
     ALCdevice *al_dev;

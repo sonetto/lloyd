@@ -1,6 +1,5 @@
 #include <assert.h>
 #include <time.h>
-#include "include/monotonic_time.h"
 
 double monotonic_time() {
     struct timespec timespec;

@@ -1,5 +1,9 @@
+#include <AL/al.h>
 #include "include/al_safe.h"
-#include "include/lloyd_internal.h"
+#include "include/lloyd_max_concurrent_bgms.h"
+#include "include/lloyd_context.h"
+#include "include/lloyd_bgm_data.h"
+#include "include/lloyd_source_data.h"
 
 int lloyd_bgm_is_playing() {
     for(int i = 0; i < lloyd_max_concurrent_bgms; ++i) {
