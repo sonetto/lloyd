@@ -30,7 +30,7 @@ static void lloyd_bgm_fade_in_update(struct lloyd_bgm_data *bgm) {
 static void lloyd_bgm_start_next() {
     lloyd_bgm_start(lloyd.bgm_next_file_path);
 
-    lloyd.bgm_next_file_path = 0;
+    lloyd.bgm_next_file_path[0] = 0;
     lloyd.bgm_after_fade_out = 0;
 }
 

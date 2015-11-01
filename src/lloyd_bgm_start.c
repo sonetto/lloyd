@@ -1,3 +1,4 @@
+#include <string.h>
 #include "include/al_safe.h"
 #include "include/lloyd_internal.h"
 #include "include/lloyd_fade.h"
@@ -26,7 +27,10 @@ lloyd_bgm_start(lloyd_core_decoder_init_params) {
         lloyd_bgm_stop();
         lloyd.bgm = 0;
 
-        lloyd.bgm_next_file_path = file_path;
+        strncpy(
+            lloyd.bgm_next_file_path, file_path, sizeof(lloyd.bgm_next_file_path)
+        );
+
         lloyd.bgm_after_fade_out = lloyd_bgm_after_fade_out_start_next;
 
         return;
