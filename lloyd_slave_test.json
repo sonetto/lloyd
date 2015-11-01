@@ -1,0 +1,19 @@
+{
+    "slave_path": "build/lloyd_slave_test",
+    "fns": {
+        "lloyd_bgm_start": {
+            "args": {
+                "file_path": {
+                    "type": "cstr",
+                    "is_string": true
+                }
+            }
+        },
+        "lloyd_bgm_is_playing": {
+            "result_type": "uint32",
+            "result_label": "result"
+        },
+        "lloyd_bgm_stop": {
+        }
+    }
+}
