@@ -1,16 +1,33 @@
 {
     "slave_path": "build/lloyd_slave_test",
     "fns": {
+        "lloyd_bgm_set_fade_in_duration": {
+            "args": {
+                "duration": {
+                    "c_type": "float",
+                    "bin_type": "float32"
+                }
+            }
+        },
+        "lloyd_bgm_set_fade_out_duration": {
+            "args": {
+                "duration": {
+                    "c_type": "float",
+                    "bin_type": "float32"
+                }
+            }
+        },
         "lloyd_bgm_start": {
             "args": {
                 "file_path": {
-                    "type": "cstr",
-                    "is_string": true
+                    "c_type": "const char *",
+                    "bin_type": "cstr"
                 }
             }
         },
         "lloyd_bgm_is_playing": {
-            "result_type": "uint32",
+            "result_c_type": "int",
+            "result_bin_type": "int32",
             "result_label": "result"
         },
         "lloyd_bgm_stop": {
