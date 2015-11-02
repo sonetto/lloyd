@@ -4,6 +4,12 @@ No time to explain. Code is worth a thousand words.
 
 [![Cat Sandwich](http://i.imgur.com/ybgSf4L.jpg)](src/include/cat_sandwich.h)
 
+## Demo
+
+[![](http://img.youtube.com/vi/tVK_OvX9Xn4/0.jpg)](http://www.youtube.com/watch?v=tVK_OvX9Xn4)
+
+*Note: The command-line interface is provided by [libslave](https://github.com/n2liquid/slave).*
+
 ## License
 
 ![](https://www.gnu.org/graphics/agplv3-155x51.png)
